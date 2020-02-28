@@ -43,7 +43,7 @@ const UserForm = ({ values, errors, touched, status }) => {
                     Password
                     <Field
                         id='password'
-                        type='text'
+                        type={values.showPassword ? 'text' : 'password'}
                         name='password'
                         placeholder='Password'
                         />
@@ -59,6 +59,9 @@ const UserForm = ({ values, errors, touched, status }) => {
                         checked={values.TermsOfService}
                     />
                     <span className ='checkmark' />
+                    {touched.TermsOfService && errors.TermsOfService && (
+                        <p className='errors'>{errors.TermsOfService}</p>
+                    )}
                 </label>
                 <button type='submit' disabled={values.isSubmitting}>
                     {values.isSubmitting ? 'Submitting' : 'Submit'}
@@ -88,9 +91,9 @@ const FormikUserForm = withFormik({
     },
 
     validationSchema: Yup.object().shape({
-        name: Yup.string().required(),
+        name: Yup.string().required().min(2, 'Too Short!'),
         email: Yup.string().required(),
-        password: Yup.string().required(),
+        password: Yup.string().required().min(8, 'Too Short!'),
         TermsOfService: Yup.boolean().oneOf([true], 'Must agree with Terms of Service')
     }),
 
